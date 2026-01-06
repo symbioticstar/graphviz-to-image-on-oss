@@ -6,12 +6,49 @@ Convert Graphviz DOT code to SVG images, upload them to Alibaba Cloud OSS, and r
 - HTTP API to convert Graphviz DOT to SVG images.
 - Automatically uploads images to OSS and returns a public link.
 - Supports integration with Model Context Protocol (MCP) tools.
+- Deployable on Vercel as Serverless Functions.
 
 ## Requirements
 - Node.js 22+
 - Alibaba Cloud OSS account (with required environment variables configured)
 
-## Installation & Usage
+## Environment Variables
+
+| Variable | Description | Required |
+|----------|-------------|----------|
+| `OSS_ENDPOINT` | OSS endpoint (e.g., `https://oss-cn-hangzhou.aliyuncs.com`) | Yes |
+| `OSS_ENDPOINT_DISPLAY` | OSS display endpoint for generating public URLs | No (defaults to `OSS_ENDPOINT`) |
+| `OSS_ACCESS_KEY_ID` | OSS Access Key ID | Yes |
+| `OSS_ACCESS_KEY_SECRET` | OSS Access Key Secret | Yes |
+| `OSS_BUCKET` | OSS Bucket name | Yes |
+
+## Deployment
+
+### Deploy to Vercel (Recommended)
+
+1. Fork or clone this repository.
+
+2. Install the Vercel CLI:
+
+```bash
+npm i -g vercel
+```
+
+3. Deploy to Vercel:
+
+```bash
+vercel
+```
+
+4. Configure environment variables in Vercel Dashboard:
+   - Go to your project settings
+   - Navigate to "Environment Variables"
+   - Add all required OSS environment variables
+
+5. Your MCP endpoint will be available at:
+   - `https://your-project.vercel.app/mcp`
+
+### Local Development
 
 1. Install dependencies:
 
@@ -19,14 +56,14 @@ Convert Graphviz DOT code to SVG images, upload them to Alibaba Cloud OSS, and r
 pnpm install
 ```
 
-2. Configure environment variables (create a `.env` file in the project root):
+2. Set environment variables (export them in your shell or use a `.env` file with a tool like `dotenv-cli`):
 
-```env
-OSS_ENDPOINT=xxx
-OSS_ENDPOINT_DISPLAY=xxx
-OSS_ACCESS_KEY_ID=xxx
-OSS_ACCESS_KEY_SECRET=xxx
-OSS_BUCKET=xxx
+```bash
+export OSS_ENDPOINT=xxx
+export OSS_ENDPOINT_DISPLAY=xxx
+export OSS_ACCESS_KEY_ID=xxx
+export OSS_ACCESS_KEY_SECRET=xxx
+export OSS_BUCKET=xxx
 ```
 
 3. Build the project:
@@ -35,13 +72,21 @@ OSS_BUCKET=xxx
 pnpm build
 ```
 
-4. Start the service:
+4. Start the local development server:
 
 ```bash
-node dist/index.js
+pnpm dev
 ```
 
 The default port is 18900. You can customize it via the `PORT` environment variable.
+
+### Local Development with Vercel CLI
+
+For a more accurate local development experience that simulates Vercel's environment:
+
+```bash
+vercel dev
+```
 
 ## API Usage
 
@@ -69,8 +114,26 @@ Response:
 
 ## Development Scripts
 - `pnpm build`: Compile TypeScript source code
+- `pnpm dev`: Start the local development server
 - `pnpm lint`: Lint code style
 - `pnpm format`: Auto-format code
+
+## Project Structure
+
+```
+├── api/                  # Vercel Serverless Functions
+│   └── mcp.ts           # MCP endpoint handler
+├── src/                  # Core source code
+│   ├── config.ts        # Environment configuration
+│   ├── handler.ts       # Express request handlers
+│   ├── index.ts         # Local development server entry
+│   ├── logger.ts        # Winston logger setup
+│   ├── mcp.ts           # MCP server factory
+│   ├── oss.ts           # Alibaba Cloud OSS upload logic
+│   └── tool-definations.ts  # MCP tool definitions
+├── vercel.json          # Vercel configuration
+└── package.json
+```
 
 ## License
 MIT

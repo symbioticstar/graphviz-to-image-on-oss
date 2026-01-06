@@ -1,8 +1,5 @@
-import dotenv from 'dotenv'
-
-dotenv.config({
-  path: '/Users/chenjingyu/ws/graphviz-to-image-on-oss/.env',
-})
+// Vercel 自动加载环境变量，不需要 dotenv
+// 本地开发时可通过 vercel dev 或手动设置环境变量
 
 // OSS 相关环境变量
 export const OSS_ENDPOINT = process.env.OSS_ENDPOINT || ''

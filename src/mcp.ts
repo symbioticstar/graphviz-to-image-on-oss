@@ -19,7 +19,7 @@ export function createMcpServer() {
 }
 
 export const mcpServerRegistrar = new Proxy(_mcpServer, {
-  get(target: McpServer, p: string | symbol): any {
+  get(_target: McpServer, p: string | symbol): any {
     // store all actions as lambdas to registeredActions
     return (...args: any[]) => {
       // no real interactinos to target, only store actions
