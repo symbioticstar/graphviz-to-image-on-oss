@@ -92,3 +92,5 @@ app.delete('/mcp', async (_req, res) => {
 app.listen(port, () => {
   logger.info(`Server listening at http://localhost:${port}`)
 })
+
+export default app
